@@ -519,118 +519,20 @@ export default function DisputeResolutionPage() {
             </CardContent>
           </Card>
         </TabsContent>
-      </Tabs>
+      </Tabs>            
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>Dispute Details: Worker Compensation Dispute</DialogTitle>
-            <DialogDescription>Case #DIS-2023-0042 • Filed on May 10, 2023</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-6">
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <div className="flex-1 space-y-4">
-                <div>
-                  <h3 className="text-sm font-medium">Dispute Summary</h3>
-                  <p className="mt-1 text-sm">
-                    Dispute over payment for completed work on Main Street repaving project. The City Public Works department is withholding 
-                    final payment of $4,500 due to alleged quality issues with the asphalt work. John Contractor claims the work meets all 
-                    specifications in the contract and has provided documentation of material quality and installation procedures.
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="text-sm font-medium">Dispute Status</h3>
-                  <div className="mt-2 flex items-center gap-2">
-                    <Badge variant="outline" className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">
-                      Critical Priority
-                    </Badge>
-                    <Badge>In Progress</Badge>
-                  </div>
-                </div>
-                
-                <div className="rounded-lg border p-4">
-                  <h3 className="text-sm font-medium">Involved Parties</h3>
-                  <div className="mt-3 space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                        <Building className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium">City Public Works</p>
-                        <p className="text-xs text-muted-foreground">Client • Represented by: Michael Johnson</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-10 w-10">
-                        <AvatarFallback>JC</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-medium">John Contractor</p>
-                        <p className="text-xs text-muted-foreground">Worker • Road Repair Specialist</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex-1 space-y-4">
-                <div>
-                  <h3 className="text-sm font-medium">Evidence Submitted</h3>
-                  <div className="mt-2 space-y-2">
-                    <div className="rounded-lg border p-2">
-                      <div className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">Contract Agreement.pdf</span>
-                      </div>
-                    </div>
-                    <div className="rounded-lg border p-2">
-                      <div className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">Material Specifications.pdf</span>
-                      </div>
-                    </div>
-                    <div className="rounded-lg border p-2">
-                      <div className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">Quality Inspection Report.pdf</span>
-                      </div>
-                    </div>
-                    <div className="rounded-lg border p-2">
-                      <div className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">Email Communications.zip</span>
-                      </div>
-                    </div>
-                    <div className="rounded-lg border p-2">
-                      <div className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">Site Photos (12).zip</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="text-sm font-medium">Timeline</h3>
-                  <div className="mt-2 space-y-3">
-                    <div className="relative pl-5">
-                      <div className="absolute left-0 top-1.5 h-2 w-2 rounded-full bg-primary"></div>
-                      <p className="text-sm font-medium">May 10, 2023</p>
-                      <p className="text-xs text-muted-foreground">Dispute filed by John Contractor</p>
-                    </div>
-                    <div className="relative pl-5">
-                      <div className="absolute left-0 top-1.5 h-2 w-2 rounded-full bg-primary"></div>
-                      <p className="text-sm font-medium">May 11, 2023</p>
-                      <p className="text-xs text-muted-foreground">Initial review by Admin</p>
-                    </div>
-                    <div className="relative pl-5">
-                      <div className="absolute left-0 top-1.5 h-2 w-2 rounded-full bg-primary"></div>
-                      <p className="text-sm font-medium">May 12, 2023</p>
-                      <p className="text-xs text-muted-foreground">Evidence collection initiated</p>
-                    </div>
-                    <div className="relative pl-5">
-                      <div className="absolute left-0 top-1.5 h-2 w-2 rounded-full bg-muted"></div>
-                      <p className="text-sm font-medium">Pending</p>
-                      <p className="text-xs text\
 
+            <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+              <Button variant="default" size="sm">
+                Propose Resolution
+              </Button>
+              <Button variant="secondary" size="sm">
+                Request Additional Evidence
+              </Button>
+              <Button variant="outline" size="sm">
+                Escalate to DAO
+              </Button>
+            </div>
+          </div>
+  )
+}
