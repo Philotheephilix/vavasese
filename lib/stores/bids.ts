@@ -1,4 +1,4 @@
-// lib/stores/bids.ts
+// lib/stores/bidstore.ts
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -12,7 +12,8 @@ export type Bid = {
   bidder: string
   timestamp: Date
   deadline: Date
-  status: "pending" | "approved" | "rejected"
+  wallet: string
+  status: "pending" | "approved" | "rejected" | "completed"
 }
 
 type BidStore = {
@@ -20,6 +21,7 @@ type BidStore = {
   addBid: (bid: Omit<Bid, 'id' | 'status'>) => void
   approveBid: (bidId: string) => void
   rejectBid: (bidId: string) => void
+  markAsCompleted: (bidId: string) => void
 }
 
 export const useBidStore = create<BidStore>()(
@@ -41,6 +43,11 @@ export const useBidStore = create<BidStore>()(
       rejectBid: (bidId) => set((state) => ({
         bids: state.bids.map(bid => 
           bid.id === bidId ? { ...bid, status: 'rejected' } : bid
+        )
+      })),
+      markAsCompleted: (bidId) => set((state) => ({
+        bids: state.bids.map(bid => 
+          bid.id === bidId ? { ...bid, status: 'completed' } : bid
         )
       }))
     }),
