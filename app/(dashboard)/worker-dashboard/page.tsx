@@ -9,17 +9,32 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { AlertCircle, CheckCircle, Clock, DollarSign, FileText, Upload, User } from "lucide-react"
 import { useBidStore } from "@/lib/stores/bids"
-
+import { ethers } from "ethers"
+import TimeLockEscrowABI from "../../../contracts/timelock-escrow/out/TimeLockEscrow.sol/TimeLockEscrow.json"; 
+''
 export default function WorkerDashboardPage() {
   const { bids } = useBidStore()
   const [walletAddress, setWalletAddress] = useState<string | null>(null)
 
-  // Mock wallet connection - replace with actual wallet implementation
   useEffect(() => {
-    setWalletAddress("0x123...") // Replace with real wallet address
-  }, [])
+    const connectWallet = async () => {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          const provider = new ethers.BrowserProvider(window.ethereum);
+          const accounts = await provider.send("eth_requestAccounts", []);
+          setWalletAddress(accounts[0]);
+        } catch (error) {
+          console.error("Failed to connect wallet:", error);
+        }
+      }
+    };
+    connectWallet();
+  }, []);
+  console.log(walletAddress)
 
-  const workerBids = bids.filter(bid => bid.wallet === walletAddress)
+  // Mock wallet connection - replace with actual wallet implementation
+  const workerBids = bids.filter(bid => bid.wallet && walletAddress && bid.wallet.toLowerCase() === walletAddress.toLowerCase())
+  console.log(workerBids)
   const approvedBids = workerBids.filter(bid => bid.status === 'approved')
   const pendingBids = workerBids.filter(bid => bid.status === 'pending')
 
@@ -29,7 +44,37 @@ export default function WorkerDashboardPage() {
     earnings: approvedBids.reduce((sum, bid) => sum + bid.amount, 0),
     reputation: 4.8
   }
+  const isMaxVotes = (bid: { votes: any }) => {
+    const allVotes = bids.map(b => b.status === 'completed' ? 1 : 0);
+    const maxVotes = Math.max(...allVotes);
+    return (bid.votes || 0) >= maxVotes;
+  };
+  const { approvePayment } = useBidStore();
 
+  // Handle payment release
+  const handlePaymentRelease = async (bid: { id: any; taskId?: string; taskTitle?: string; amount: any; days?: number; proposal?: string; bidder?: string; timestamp?: Date; deadline?: Date; wallet?: string; status?: "pending" | "approved" | "rejected" | "completed";escrowIndex:number; }) => {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = provider.getSigner();
+      const escrow = new ethers.Contract(
+        process.env.NEXT_PUBLIC_ESCROW_ADDRESS!,
+        TimeLockEscrowABI.abi,
+        await signer
+      );
+  
+      // 3. Execute withdrawal
+      const tx = await escrow.withdraw(bid.escrowIndex);
+      await tx.wait();
+  
+      // 4. Update store
+      approvePayment(bid.id);
+  
+    } catch (error) {
+      console.error("Payment failed:", error);
+      // Handle error state
+    }
+  };
+  
   return (
     <div className="flex flex-col w-full gap-6 max-w-full">
       <div className="flex flex-col gap-2">
@@ -132,9 +177,6 @@ export default function WorkerDashboardPage() {
             <Card key={bid.id}>
               <CardHeader className="pb-2">
                 <CardTitle>{bid.taskTitle}</CardTitle>
-                <CardDescription>
-                  Submitted on {bid.timestamp.toLocaleDateString()}
-                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between">
@@ -192,7 +234,7 @@ export default function WorkerDashboardPage() {
         <CardHeader>
           <CardTitle>Payment Status</CardTitle>
           <CardDescription>
-            Track your earnings and payment status
+            Track your earnings and payment approvals
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -203,45 +245,61 @@ export default function WorkerDashboardPage() {
                   <tr className="border-b">
                     <th className="px-4 py-2 text-left text-sm font-medium">Task</th>
                     <th className="px-4 py-2 text-left text-sm font-medium">Amount</th>
+                    <th className="px-4 py-2 text-left text-sm font-medium">Votes</th>
                     <th className="px-4 py-2 text-left text-sm font-medium">Status</th>
-                    <th className="px-4 py-2 text-left text-sm font-medium">Date</th>
+                    <th className="px-4 py-2 text-left text-sm font-medium">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <tr key={i} className="border-b last:border-0">
-                      <td className="px-4 py-2 text-sm font-medium">
-                        {["Fallen Tree Removal", "Park Bench Repair", "Sidewalk Repair", "Traffic Light Maintenance", "Playground Equipment Repair"][i]}
-                      </td>
-                      <td className="px-4 py-2 text-sm">
-                        ${[600, 200, 350, 400, 250][i]}
-                      </td>
-                      <td className="px-4 py-2 text-sm">
-                        {i < 2 ? (
-                          <Badge variant="outline" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-                            Pending
+                  {workerBids
+                    .filter(bid => bid.status === 'approved')
+                    .map((bid) => (
+                      <tr key={bid.id} className="border-b last:border-0">
+                        <td className="px-4 py-2 text-sm font-medium">
+                          {bid.taskTitle}
+                        </td>
+                        <td className="px-4 py-2 text-sm">
+                          ${bid.amount}
+                        </td>
+                        <td className="px-4 py-2 text-sm">
+                          <Badge variant="outline">
+                            {bid.amount+4 || 0} approvals
                           </Badge>
-                        ) : (
-                          <Badge variant="outline" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
-                            Paid
-                          </Badge>
-                        )}
-                      </td>
-                      <td className="px-4 py-2 text-sm">
-                        {["May 14, 2023", "May 10, 2023", "April 28, 2023", "April 15, 2023", "March 30, 2023"][i]}
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td className="px-4 py-2 text-sm">
+                          {bid.status === 'completed' ? (
+                            <Badge variant="outline" className="bg-green-100 text-green-800">
+                              Paid
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="bg-yellow-100 text-yellow-800">
+                              Pending
+                            </Badge>
+                          )}
+                        </td>
+                        <td className="px-4 py-2 text-sm">
+                          <Button 
+                            size="sm"
+                            disabled={bid.status==='pending' || !bid.escrowIndex}
+                            onClick={() => bid.escrowIndex && handlePaymentRelease(bid as any)}
+                          >
+                            {bid.status ? 'Completed' : 'Claim Payment'}
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
 
             <div className="flex items-center justify-between">
               <p className="text-sm text-muted-foreground">
-                Total Pending: $800
+                Total Pending: ${workerBids.filter(bid => bid.status === 'approved' || bid.status === 'pending')
+                  .reduce((sum, bid) => sum + bid.amount, 0)}
               </p>
               <p className="text-sm text-muted-foreground">
-                Total Paid: $1,250
+                Total Paid: ${workerBids.filter(bid => bid.status === 'completed')
+                  .reduce((sum, bid) => sum + bid.amount, 0)}
               </p>
             </div>
           </div>
@@ -249,4 +307,21 @@ export default function WorkerDashboardPage() {
       </Card>
     </div>
   )
+}
+async function convertUsdToEth(usdAmount: number): Promise<number> {
+  try {
+    // Fetch current ETH price in USD from CoinGecko API
+    const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+    const data = await response.json();
+    const ethPrice = data.ethereum.usd;
+
+    // Convert USD to ETH
+    const ethAmount = usdAmount / ethPrice;
+    
+    // Return the amount in ETH, rounded to 6 decimal places
+    return Number(ethAmount.toFixed(6));
+  } catch (error) {
+    console.error('Error converting USD to ETH:', error);
+    throw new Error('Failed to convert USD to ETH');
+  }
 }
