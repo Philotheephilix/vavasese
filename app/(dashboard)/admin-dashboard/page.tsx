@@ -124,7 +124,6 @@ export default function AdminDashboardPage() {
       <Tabs defaultValue="users" className="space-y-4">
         <TabsList>
           <TabsTrigger value="users">User Management</TabsTrigger>
-          <TabsTrigger value="reports">Content Reports</TabsTrigger>
           <TabsTrigger value="transactions">Transaction History</TabsTrigger>
           <TabsTrigger value="logs">System Logs</TabsTrigger>
         </TabsList>
@@ -176,24 +175,24 @@ export default function AdminDashboardPage() {
                   <tbody>
                     {[
                       {
-                        name: "Jane Doe",
-                        email: "jane.doe@example.com",
+                        name: "Philo Sanjay",
+                        email: "Sanjay@gmail.com",
                         type: "Citizen",
                         status: "Active",
                         joined: "Jan 15, 2023",
                         verified: true,
                       },
                       {
-                        name: "John Contractor",
-                        email: "john.contractor@example.com",
+                        name: "Sairam M R",
+                        email: "Sairam@gmail.com",
                         type: "Worker",
                         status: "Active",
                         joined: "Feb 3, 2023",
                         verified: true,
                       },
                       {
-                        name: "Robert Brown",
-                        email: "robert.brown@example.com",
+                        name: "Solaimuthu A",
+                        email: "Solaimuthu@gmail.com",
                         type: "DAO Member",
                         status: "Active",
                         joined: "Mar 10, 2023",
@@ -201,7 +200,7 @@ export default function AdminDashboardPage() {
                       },
                       {
                         name: "Sarah Miller",
-                        email: "sarah.miller@example.com",
+                        email: "sarah.miller@gmail.com",
                         type: "Citizen",
                         status: "Suspended",
                         joined: "Apr 22, 2023",
@@ -209,7 +208,7 @@ export default function AdminDashboardPage() {
                       },
                       {
                         name: "Tom Martin",
-                        email: "tom.martin@example.com",
+                        email: "tom.martin@gmail.com",
                         type: "Worker",
                         status: "Pending",
                         joined: "May 8, 2023",
@@ -299,107 +298,6 @@ export default function AdminDashboardPage() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="reports" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Content Reports</CardTitle>
-              <CardDescription>Review and moderate reported content</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {[
-                  {
-                    type: "Grievance",
-                    title: "Offensive language in pothole report",
-                    reporter: "Sarah Miller",
-                    reportedUser: "Anonymous User",
-                    date: "May 10, 2023",
-                    status: "Pending",
-                    priority: "Medium",
-                  },
-                  {
-                    type: "Comment",
-                    title: "Harassment in public discussion",
-                    reporter: "John Doe",
-                    reportedUser: "Tom Wilson",
-                    date: "May 9, 2023",
-                    status: "Under Review",
-                    priority: "High",
-                  },
-                  {
-                    type: "Profile",
-                    title: "Fake contractor credentials",
-                    reporter: "Building Department",
-                    reportedUser: "James Smith",
-                    date: "May 8, 2023",
-                    status: "Under Review",
-                    priority: "High",
-                  },
-                  {
-                    type: "Grievance",
-                    title: "Duplicate report submission",
-                    reporter: "System",
-                    reportedUser: "Karen Jones",
-                    date: "May 7, 2023",
-                    status: "Resolved",
-                    priority: "Low",
-                  },
-                ].map((report, i) => (
-                  <div key={i} className="rounded-lg border p-4">
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <Badge>{report.type}</Badge>
-                          <Badge
-                            variant="outline"
-                            className={
-                              report.priority === "High"
-                                ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
-                                : report.priority === "Medium"
-                                  ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-                                  : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-                            }
-                          >
-                            {report.priority} Priority
-                          </Badge>
-                        </div>
-                        <h3 className="mt-1 font-medium">{report.title}</h3>
-                        <div className="mt-1 text-sm text-muted-foreground">
-                          <span>Reported by: {report.reporter}</span>
-                          <span className="mx-2">•</span>
-                          <span>User: {report.reportedUser}</span>
-                        </div>
-                      </div>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-sm">{report.date}</span>
-                        </div>
-                        <Badge
-                          variant="outline"
-                          className={
-                            report.status === "Resolved"
-                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-                              : report.status === "Under Review"
-                                ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-                                : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-                          }
-                        >
-                          {report.status}
-                        </Badge>
-                        <Button size="sm">Review</Button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="flex justify-center mt-4">
-                <Button variant="outline">View All Reports</Button>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
         <TabsContent value="transactions" className="space-y-4">
           <Card>
             <CardHeader>
@@ -453,7 +351,7 @@ export default function AdminDashboardPage() {
                           {
                             [
                               "Main Street Repaving - Phase 1",
-                              "Worker Payment - John Contractor",
+                              "Worker Payment - Philo Sanjay",
                               "Community Center Renovation Fund",
                               "Emergency Fund Allocation",
                               "Worker Payment - Sarah Plumber",

@@ -23,158 +23,7 @@ export default function ProfilePage() {
         <p className="text-muted-foreground">Manage your account and contributions</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-[1fr_2fr]">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Profile Overview</CardTitle>
-            <Button variant="ghost" size="icon" onClick={() => setEditMode(!editMode)}>
-              <Edit className="h-4 w-4" />
-            </Button>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="flex flex-col items-center space-y-3">
-              <Avatar className="h-24 w-24">
-                <AvatarImage src="/placeholder.svg?height=96&width=96" alt="User" />
-                <AvatarFallback>JD</AvatarFallback>
-              </Avatar>
-              <div className="space-y-1 text-center">
-                <h3 className="text-lg font-medium">Jane Doe</h3>
-                <p className="text-sm text-muted-foreground">Joined January 2023</p>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Reputation Score</span>
-                <Badge>4.8/5</Badge>
-              </div>
-              <Progress value={96} className="h-2" />
-              <p className="text-xs text-muted-foreground">Based on reporting accuracy and voting activity</p>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Token Balance</span>
-                <Badge variant="outline">250 Tokens</Badge>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <CheckCircle className="h-3 w-3" />
-                <span>Earned via submissions and voting</span>
-              </div>
-            </div>
-
-            <div className="rounded-lg border p-3">
-              <div className="flex items-center gap-2">
-                <Wallet className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Connected Wallet</span>
-              </div>
-              <p className="mt-1 text-xs text-muted-foreground">0x1a2...3b4c</p>
-              <div className="mt-2 flex items-center gap-1 text-xs">
-                <Shield className="h-3 w-3 text-muted-foreground" />
-                <span className="text-muted-foreground">Smart Wallet Integration</span>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium">Badges</h4>
-              <div className="flex flex-wrap gap-2">
-                <Badge variant="outline" className="flex items-center gap-1">
-                  <Award className="h-3 w-3" />
-                  <span>Top Reporter</span>
-                </Badge>
-                <Badge variant="outline" className="flex items-center gap-1">
-                  <CheckCircle className="h-3 w-3" />
-                  <span>Verified Citizen</span>
-                </Badge>
-                <Badge variant="outline" className="flex items-center gap-1">
-                  <BarChart3 className="h-3 w-3" />
-                  <span>Active Voter</span>
-                </Badge>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="space-y-6">
-          <Tabs defaultValue="details" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="details">Account Details</TabsTrigger>
-              <TabsTrigger value="activity">Activity</TabsTrigger>
-              <TabsTrigger value="settings">Settings</TabsTrigger>
-            </TabsList>
-            <TabsContent value="details" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Personal Information</CardTitle>
-                  <CardDescription>Manage your personal details</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {editMode ? (
-                    <div className="space-y-4">
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="space-y-2">
-                          <Label htmlFor="first-name">First Name</Label>
-                          <Input id="first-name" defaultValue="Jane" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="last-name">Last Name</Label>
-                          <Input id="last-name" defaultValue="Doe" />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" defaultValue="jane.doe@example.com" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="phone">Phone</Label>
-                        <Input id="phone" type="tel" defaultValue="(555) 123-4567" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="address">Address</Label>
-                        <Textarea id="address" defaultValue="123 Main St, Anytown, USA" />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div>
-                          <p className="text-sm font-medium text-muted-foreground">First Name</p>
-                          <p>Jane</p>
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium text-muted-foreground">Last Name</p>
-                          <p>Doe</p>
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-muted-foreground">Email</p>
-                        <p>jane.doe@example.com</p>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-muted-foreground">Phone</p>
-                        <p>(555) 123-4567</p>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-muted-foreground">Address</p>
-                        <p>123 Main St, Anytown, USA</p>
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-                <CardFooter>
-                  {editMode && (
-                    <div className="flex w-full gap-2">
-                      <Button className="flex-1" onClick={() => setEditMode(false)}>
-                        Save Changes
-                      </Button>
-                      <Button variant="outline" className="flex-1" onClick={() => setEditMode(false)}>
-                        Cancel
-                      </Button>
-                    </div>
-                  )}
-                </CardFooter>
-              </Card>
-
+      <div className="">
               <Card>
                 <CardHeader>
                   <CardTitle>Identity Verification</CardTitle>
@@ -223,8 +72,8 @@ export default function ProfilePage() {
                   </div>
                 </CardContent>
               </Card>
-            </TabsContent>
-            <TabsContent value="activity" className="space-y-4">
+            <Tabs>
+            <TabsContent value="activity" className="space-y-1">
               <Card>
                 <CardHeader>
                   <CardTitle>Recent Activity</CardTitle>
@@ -396,10 +245,9 @@ export default function ProfilePage() {
                 </CardContent>
               </Card>
             </TabsContent>
-          </Tabs>
+            </Tabs>
         </div>
       </div>
-    </div>
   )
 }
 

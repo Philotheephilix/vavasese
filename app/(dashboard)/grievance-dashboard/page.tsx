@@ -185,30 +185,6 @@ export default function GrievanceDashboardPage() {
               </div>
             </CardContent>
           </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle>Graffiti on Community Center</CardTitle>
-              <CardDescription>Submitted 3 weeks ago • ID: GR-2023-0028</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <Badge>Public Property</Badge>
-                  <Badge
-                    variant="outline"
-                    className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-300 dark:hover:bg-yellow-900"
-                  >
-                    In Progress
-                  </Badge>
-                </div>
-
-                <Button variant="link" className="px-0">
-                  View Details <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
         </TabsContent>
         <TabsContent value="resolved" className="space-y-4">
           <Card>

@@ -14,82 +14,7 @@ export default function ReputationPage() {
         <p className="text-muted-foreground">Manage and improve your worker reputation score</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-[1fr_2fr]">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle>Reputation Overview</CardTitle>
-            <CardDescription>Your current standing in the community</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="flex flex-col items-center space-y-3">
-              <Avatar className="h-24 w-24">
-                <AvatarImage src="/placeholder.svg?height=96&width=96" alt="Worker" />
-                <AvatarFallback>JD</AvatarFallback>
-              </Avatar>
-              <div className="space-y-1 text-center">
-                <h3 className="text-lg font-medium">John Contractor</h3>
-                <p className="text-sm text-muted-foreground">Road Repair Specialist</p>
-              </div>
-            </div>
-
-            <div className="flex flex-col items-center justify-center space-y-2">
-              <div className="flex items-center">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className={`h-6 w-6 ${i < 4 ? "fill-yellow-400 text-yellow-400" : "text-muted"}`} />
-                ))}
-              </div>
-              <span className="text-xl font-bold">4.8/5.0</span>
-              <span className="text-sm text-muted-foreground">Based on 145 reviews</span>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Response Rate</span>
-                <span className="text-sm">95%</span>
-              </div>
-              <Progress value={95} className="h-2" />
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">On-Time Completion</span>
-                <span className="text-sm">92%</span>
-              </div>
-              <Progress value={92} className="h-2" />
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Quality Score</span>
-                <span className="text-sm">96%</span>
-              </div>
-              <Progress value={96} className="h-2" />
-            </div>
-
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium">Badges</h4>
-              <div className="flex flex-wrap gap-2">
-                <Badge variant="outline" className="flex items-center gap-1">
-                  <Award className="h-3 w-3" />
-                  <span>Top Performer</span>
-                </Badge>
-                <Badge variant="outline" className="flex items-center gap-1">
-                  <Shield className="h-3 w-3" />
-                  <span>Verified Worker</span>
-                </Badge>
-                <Badge variant="outline" className="flex items-center gap-1">
-                  <Medal className="h-3 w-3" />
-                  <span>Expert Level</span>
-                </Badge>
-                <Badge variant="outline" className="flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
-                  <span>Always On Time</span>
-                </Badge>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
+      <div className="grid gap-6 ">
         <div className="space-y-6">
           <Tabs defaultValue="reviews" className="space-y-4">
             <TabsList>
@@ -110,13 +35,7 @@ export default function ReputationPage() {
                         <div key={i} className="rounded-lg border p-4">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                              <Avatar className="h-9 w-9">
-                                <AvatarFallback>{["SM", "TJ", "AD", "BS", "MJ"][i]}</AvatarFallback>
-                              </Avatar>
                               <div>
-                                <p className="text-sm font-medium">
-                                  {["Sarah Miller", "Tom Johnson", "Alice Davis", "Bob Smith", "Mary Jones"][i]}
-                                </p>
                                 <p className="text-xs text-muted-foreground">
                                   {
                                     [

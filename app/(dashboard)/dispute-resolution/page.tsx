@@ -136,28 +136,6 @@ export default function DisputeResolutionPage() {
                     filed: "May 8, 2023",
                     priority: "High",
                     status: "Under Investigation"
-                  },
-                  {
-                    id: 3,
-                    title: "Project Scope Disagreement",
-                    description: "Conflict over the scope of work for community center renovation",
-                    party1: { name: "Community Center Board", type: "Client" },
-                    party2: { name: "BuildRight Contractors", type: "Worker" },
-                    amount: 12500,
-                    filed: "May 5, 2023",
-                    priority: "Medium",
-                    status: "Evidence Collection"
-                  },
-                  {
-                    id: 4,
-                    title: "Duplicate Grievance Report",
-                    description: "Dispute over merger of similar grievances reported by multiple citizens",
-                    party1: { name: "Robert Brown", type: "Citizen" },
-                    party2: { name: "Lisa Johnson", type: "Citizen" },
-                    amount: 0,
-                    filed: "May 3, 2023",
-                    priority: "Low",
-                    status: "Scheduling Mediation"
                   }
                 ].map((dispute) => (
                   <div key={dispute.id} className="rounded-lg border cursor-pointer hover:bg-muted/50 transition" onClick={() => handleDisputeClick(dispute.id)}>
@@ -254,26 +232,6 @@ export default function DisputeResolutionPage() {
                     resolution: "Reduced payment by 15% with extended timeline",
                     proposed: "May 8, 2023",
                     waiting: "Both parties"
-                  },
-                  {
-                    id: 6,
-                    title: "Water Leak Emergency Repair Cost",
-                    description: "Dispute over emergency repair costs and authorization",
-                    party1: { name: "Water Utility", type: "Client" },
-                    party2: { name: "Rapid Plumbing", type: "Worker" },
-                    resolution: "Full payment approved with future contract adjustment",
-                    proposed: "May 7, 2023",
-                    waiting: "Client approval"
-                  },
-                  {
-                    id: 7,
-                    title: "Sidewalk Repair Materials Dispute",
-                    description: "Disagreement about materials quality and specifications",
-                    party1: { name: "City Engineering", type: "Client" },
-                    party2: { name: "Concrete Solutions", type: "Worker" },
-                    resolution: "Partial rework with shared material costs",
-                    proposed: "May 5, 2023",
-                    waiting: "Worker approval"
                   }
                 ].map((dispute) => (
                   <div key={dispute.id} className="rounded-lg border cursor-pointer hover:bg-muted/50 transition" onClick={() => handleDisputeClick(dispute.id)}>
@@ -432,28 +390,6 @@ export default function DisputeResolutionPage() {
                     escalated: "May 2, 2023",
                     status: "DAO Review",
                     votes: { yes: 12, no: 5, abstain: 8 }
-                  },
-                  {
-                    id: 9,
-                    title: "Worker Certification Dispute",
-                    description: "Challenge to worker certification validity for specialized electrical work",
-                    party1: { name: "Electrical Safety Board", type: "Client" },
-                    party2: { name: "James Wilson", type: "Worker" },
-                    amount: 0,
-                    escalated: "April 28, 2023",
-                    status: "DAO Voting",
-                    votes: { yes: 18, no: 3, abstain: 4 }
-                  },
-                  {
-                    id: 10,
-                    title: "Community Fund Allocation Dispute",
-                    description: "Disagreement over allocation of community improvement funds",
-                    party1: { name: "Neighborhood Association", type: "Client" },
-                    party2: { name: "Parks Department", type: "Client" },
-                    amount: 75000,
-                    escalated: "April 25, 2023",
-                    status: "DAO Deliberation",
-                    votes: { yes: 10, no: 10, abstain: 5 }
                   }
                 ].map((dispute) => (
                   <div key={dispute.id} className="rounded-lg border cursor-pointer hover:bg-muted/50 transition" onClick={() => handleDisputeClick(dispute.id)}>
