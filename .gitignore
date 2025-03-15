@@ -27,3 +27,4 @@ yarn-error.log*
 next-env.d.ts
 bun.lock
 /contracts/GrievanceRegistry{BASE}/lib
+/contracts/timelock-escrow/node_modules

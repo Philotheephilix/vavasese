@@ -1,10 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-interface IReactiveService {
-    function subscribe(uint256 chainId, address contractAddress, bytes4 eventSig) external;
-    function triggerCallback(address target, bytes calldata data) external;
-}
+import "./interfaces/IReactiveService.sol";
 
 contract TimeLockReactive {
     address public immutable baseEscrow;
@@ -13,11 +10,13 @@ contract TimeLockReactive {
     constructor(address _baseEscrow, address _reactiveService) {
         baseEscrow = _baseEscrow;
         reactiveService = IReactiveService(_reactiveService);
-        
+    }
+    
+    function initialize() external {
         // Subscribe to Base contract's Deposit event
         reactiveService.subscribe(
             8453, // Base Chain ID
-            _baseEscrow,
+            baseEscrow,
             bytes4(keccak256("Deposited(address,uint256,uint256,uint256)"))
         );
     }
