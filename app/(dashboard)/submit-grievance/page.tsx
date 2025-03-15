@@ -10,10 +10,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AlertCircle, Camera, MapPin, Upload } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function SubmitGrievancePage() {
   const [step, setStep] = useState(1)
   const [urgency, setUrgency] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { toast } = useToast()
+
+  // Form state
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    category: "",
+    address: "",
+    landmark: "",
+    mediaFiles: [] as File[],
+  })
 
   const handleNext = () => {
     if (step < 3) {
@@ -27,17 +40,69 @@ export default function SubmitGrievancePage() {
     }
   }
 
-  const handleSubmit = () => {
-    // Handle form submission
-    alert("Grievance submitted successfully!")
-    setStep(1)
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files)
+      setFormData(prev => ({
+        ...prev,
+        mediaFiles: [...prev.mediaFiles, ...files]
+      }))
+    }
   }
 
-  const simulateAIAnalysis = () => {
-    // Simulate AI analysis
-    setTimeout(() => {
-      setUrgency("High Priority: Pothole on Main St")
-    }, 1500)
+  const handleSubmit = async () => {
+    setIsSubmitting(true)
+    try {
+      const formPayload = new FormData()
+      
+      // Append form data
+      formPayload.append('title', formData.title)
+      formPayload.append('description', formData.description)
+      formPayload.append('category', formData.category)
+      formPayload.append('location', `${formData.address} ${formData.landmark}`)
+      
+      // Append image files
+      formData.mediaFiles.forEach((file, index) => {
+        formPayload.append(`image`, file)
+      })
+
+      const response = await fetch('http://localhost:5000/submit_grievance', {
+        method: 'POST',
+        body: formPayload
+      })
+
+      if (!response.ok) {
+        throw new Error('Submission failed')
+      }
+
+      const result = await response.json()
+      
+      toast({
+        title: "Grievance Submitted",
+        description: "Your report has been successfully submitted to the blockchain",
+      })
+
+      // Reset form
+      setFormData({
+        title: "",
+        description: "",
+        category: "",
+        address: "",
+        landmark: "",
+        mediaFiles: [],
+      })
+      setStep(1)
+      setUrgency(null)
+
+    } catch (error) {
+      toast({
+        title: "Submission Error",
+        description: "There was a problem submitting your grievance",
+        variant: "destructive"
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -66,15 +131,29 @@ export default function SubmitGrievancePage() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="title">Title</Label>
-                <Input id="title" placeholder="E.g., Pothole on Main Street" />
+                <Input 
+                  id="title" 
+                  placeholder="E.g., Pothole on Main Street" 
+                  value={formData.title}
+                  onChange={(e) => setFormData({...formData, title: e.target.value})}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
-                <Textarea id="description" placeholder="Describe the issue in detail..." rows={5} />
+                <Textarea 
+                  id="description" 
+                  placeholder="Describe the issue in detail..." 
+                  rows={5}
+                  value={formData.description}
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
-                <Select>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) => setFormData({...formData, category: value})}
+                >
                   <SelectTrigger id="category">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
@@ -91,17 +170,36 @@ export default function SubmitGrievancePage() {
               <div className="space-y-2">
                 <Label>Media</Label>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div className="flex h-32 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed p-4 text-center hover:bg-muted/50">
+                  <label className="flex h-32 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed p-4 text-center hover:bg-muted/50">
                     <Camera className="mb-2 h-6 w-6 text-muted-foreground" />
                     <p className="text-sm font-medium">Take Photo</p>
                     <p className="text-xs text-muted-foreground">Use your camera to capture the issue</p>
-                  </div>
-                  <div className="flex h-32 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed p-4 text-center hover:bg-muted/50">
+                    <input 
+                      type="file" 
+                      className="hidden"
+                      accept="image/*"
+                      capture="environment"
+                      onChange={handleFileUpload}
+                    />
+                  </label>
+                  <label className="flex h-32 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed p-4 text-center hover:bg-muted/50">
                     <Upload className="mb-2 h-6 w-6 text-muted-foreground" />
                     <p className="text-sm font-medium">Upload Files</p>
                     <p className="text-xs text-muted-foreground">Upload photos or videos</p>
-                  </div>
+                    <input 
+                      type="file" 
+                      className="hidden"
+                      accept="image/*"
+                      multiple
+                      onChange={handleFileUpload}
+                    />
+                  </label>
                 </div>
+                {formData.mediaFiles.length > 0 && (
+                  <div className="text-sm text-muted-foreground">
+                    {formData.mediaFiles.length} file(s) selected
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -110,7 +208,12 @@ export default function SubmitGrievancePage() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="address">Address</Label>
-                <Input id="address" placeholder="Enter the street address" />
+                <Input 
+                  id="address" 
+                  placeholder="Enter the street address"
+                  value={formData.address}
+                  onChange={(e) => setFormData({...formData, address: e.target.value})}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Pin Location</Label>
@@ -124,7 +227,12 @@ export default function SubmitGrievancePage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="landmark">Nearby Landmark (Optional)</Label>
-                <Input id="landmark" placeholder="E.g., Next to City Park" />
+                <Input 
+                  id="landmark" 
+                  placeholder="E.g., Next to City Park"
+                  value={formData.landmark}
+                  onChange={(e) => setFormData({...formData, landmark: e.target.value})}
+                />
               </div>
             </div>
           )}
@@ -132,53 +240,32 @@ export default function SubmitGrievancePage() {
           {step === 3 && (
             <div className="space-y-6">
               <div className="space-y-2">
-                <h3 className="text-lg font-medium">AI Analysis</h3>
-                {!urgency ? (
-                  <div className="flex flex-col items-center justify-center rounded-lg border p-6">
-                    <p className="mb-4 text-center text-sm text-muted-foreground">
-                      Our AI will analyze your submission to determine urgency and suggest appropriate actions.
-                    </p>
-                    <Button onClick={simulateAIAnalysis}>Run AI Analysis</Button>
-                  </div>
-                ) : (
-                  <div className="rounded-lg border p-4">
-                    <div className="flex items-center gap-2">
-                      <AlertCircle className="h-5 w-5 text-destructive" />
-                      <span className="font-medium text-destructive">{urgency}</span>
-                    </div>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      This issue has been classified as high priority due to safety concerns. Estimated response time:
-                      24-48 hours.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div>
                 <h3 className="text-lg font-medium">Submission Summary</h3>
                 <Separator className="my-2" />
                 <dl className="space-y-4 text-sm">
                   <div className="grid grid-cols-3 gap-1">
                     <dt className="font-medium text-muted-foreground">Title:</dt>
-                    <dd className="col-span-2">Pothole on Main Street</dd>
+                    <dd className="col-span-2">{formData.title || "-"}</dd>
                   </div>
                   <div className="grid grid-cols-3 gap-1">
                     <dt className="font-medium text-muted-foreground">Category:</dt>
-                    <dd className="col-span-2">Infrastructure</dd>
+                    <dd className="col-span-2">{formData.category || "-"}</dd>
                   </div>
                   <div className="grid grid-cols-3 gap-1">
                     <dt className="font-medium text-muted-foreground">Location:</dt>
-                    <dd className="col-span-2">123 Main St, Anytown</dd>
-                  </div>
-                  <div className="grid grid-cols-3 gap-1">
-                    <dt className="font-medium text-muted-foreground">Description:</dt>
                     <dd className="col-span-2">
-                      Large pothole approximately 2 feet wide causing traffic hazards and potential vehicle damage.
+                      {[formData.address, formData.landmark].filter(Boolean).join(" - ")}
                     </dd>
                   </div>
                   <div className="grid grid-cols-3 gap-1">
+                    <dt className="font-medium text-muted-foreground">Description:</dt>
+                    <dd className="col-span-2">{formData.description || "-"}</dd>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1">
                     <dt className="font-medium text-muted-foreground">Media:</dt>
-                    <dd className="col-span-2">2 photos uploaded</dd>
+                    <dd className="col-span-2">
+                      {formData.mediaFiles.length} file(s) uploaded
+                    </dd>
                   </div>
                 </dl>
               </div>
@@ -196,11 +283,12 @@ export default function SubmitGrievancePage() {
           {step < 3 ? (
             <Button onClick={handleNext}>Next</Button>
           ) : (
-            <Button onClick={handleSubmit}>Submit Grievance</Button>
+            <Button onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? "Submitting..." : "Submit Grievance"}
+            </Button>
           )}
         </CardFooter>
       </Card>
     </div>
   )
 }
-
