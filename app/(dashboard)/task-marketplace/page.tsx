@@ -155,7 +155,6 @@ export default function TaskMarketplacePage() {
   const { toast } = useToast()
   const [bidDialogOpen, setBidDialogOpen] = useState(false)
   const [selectedTask, setSelectedTask] = useState<string | null>(null)
-  const [filterDistance, setFilterDistance] = useState([5])
   const [grievanceTasks, setGrievanceTasks] = useState<GrievanceTask[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
@@ -360,7 +359,7 @@ const connectWallet = async () => {
         proposal: formData.proposal,
         bidder: "Worker123", // Replace with actual user wallet address
         timestamp: new Date(),
-        wallet : "0x123...",
+        wallet: walletAddress?.toString() || "0x38b09fF7F662D02402397653766ed795F9FD8f25",
         deadline: calculateDeadline(task.timestamp, task.estimatedDays)
       })
 
