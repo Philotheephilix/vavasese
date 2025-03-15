@@ -36,12 +36,14 @@ function Playground() {
         <h1 className="text-2xl font-bold text-white">VAVASASA</h1>
       </nav>
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
+        <h2 className="text-xl md:text-2xl font-bold mb-8">Login with Self Protocol by CELO</h2>
         <div className="w-full max-w-6xl flex flex-col md:flex-row gap-8 items-center justify-center">
           <div className="w-full md:w-1/2 flex flex-col items-center justify-center">
         <SelfQRcodeWrapper
         selfApp={selfApp}
         onSuccess={() => {
           console.log('Verification successful');
+          
           // Store user ID in local storage
           localStorage.setItem('userId', userId);
           // Redirect to dashboard
