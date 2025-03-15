@@ -1,3 +1,6 @@
 [submodule "GrievanceRegistry/lib/forge-std"]
 	path = GrievanceRegistry/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "zeta-deploy/lib/forge-std"]
+	path = zeta-deploy/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
