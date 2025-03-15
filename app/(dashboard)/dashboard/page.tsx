@@ -122,6 +122,7 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </TabsContent>
+        
         <TabsContent value="nearby" className="space-y-4">
           <Card>
             <CardHeader>
