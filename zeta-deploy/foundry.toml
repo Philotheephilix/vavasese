@@ -1,0 +1,8 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+
+[rpc_endpoints]
+zeta_testnet = "https://zetachain-athens-evm.blockpi.network/v1/rpc/public"
+
