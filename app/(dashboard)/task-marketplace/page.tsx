@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react" 
+import { useToast } from "@/components/ui/use-toast" 
+import { ToastAction } from "@/components/ui/toast" 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -8,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Textarea } from "@/components/ui/textarea"
+import { useBidStore } from "@/lib/stores/bids"
 import {
   Dialog,
   DialogContent,
@@ -19,15 +22,82 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Award, Calendar, Clock, DollarSign, Filter, MapPin, Search, Star, User } from "lucide-react"
 import Image from "next/image"
+import { TaskTimer } from "@/components/task-timer"
+type Bid = {
+  amount: number;
+  days: number;
+  proposal: string;
+  bidder: string;
+  timestamp: Date;
+  taskId: string;
+};
+
+const mockTasks = [
+  {
+    id: "pothole-1",
+    title: "Pothole Repair on Main Street",
+    category: "Infrastructure",
+    reward: 450,
+    deadline: new Date("2023-05-20")
+  },
+  // ... other mock tasks
+]
 
 export default function TaskMarketplacePage() {
+  const { toast } = useToast()
   const [bidDialogOpen, setBidDialogOpen] = useState(false)
   const [selectedTask, setSelectedTask] = useState<string | null>(null)
   const [filterDistance, setFilterDistance] = useState([5])
+  const [formData, setFormData] = useState({
+    amount: 0,
+    timeframe: "",
+    proposal: ""
+  })
 
   const handleBidClick = (taskId: string) => {
     setSelectedTask(taskId)
     setBidDialogOpen(true)
+  }
+
+  const submitBid = async (taskId: string) => {
+    if (!formData.amount || !formData.timeframe || !formData.proposal) {
+      toast({
+        variant: "destructive",
+        title: "Missing Fields",
+        description: "Please fill all required bid fields",
+      })
+      return
+    }
+
+    try {
+      const task = mockTasks.find(t => t.id === taskId)
+      
+      useBidStore.getState().addBid({
+        taskId,
+        taskTitle: task?.title || "Unknown Task",
+        amount: formData.amount,
+        days: parseInt(formData.timeframe),
+        proposal: formData.proposal,
+        bidder: "Worker123", // Replace with actual user
+        timestamp: new Date(),
+        deadline: task?.deadline || new Date()
+      })
+
+      setFormData({ amount: 0, timeframe: "", proposal: "" })
+      setBidDialogOpen(false)
+      
+      toast({
+        title: "Bid Submitted",
+        description: "Your bid has been submitted for DAO review",
+      })
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Submission Failed",
+        description: "Could not submit bid. Please try again.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      })
+    }
   }
 
   return (
@@ -144,18 +214,6 @@ export default function TaskMarketplacePage() {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle>Available Tasks</CardTitle>
-                <Select defaultValue="newest">
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Sort by" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="newest">Newest First</SelectItem>
-                    <SelectItem value="reward-high">Highest Reward</SelectItem>
-                    <SelectItem value="reward-low">Lowest Reward</SelectItem>
-                    <SelectItem value="deadline">Closest Deadline</SelectItem>
-                    <SelectItem value="distance">Nearest Location</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
               <CardDescription>Found 28 tasks matching your criteria</CardDescription>
             </CardHeader>
@@ -203,8 +261,11 @@ export default function TaskMarketplacePage() {
                           <span className="font-medium">$450</span>
                         </div>
                         <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-1">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
-                          <span>Deadline: May 20, 2023</span>
+                          <span>Deadline: May 20, 2025</span>
+                          <TaskTimer deadline={new Date('2025-05-20')} />
+                        </div>
                         </div>
                         <div className="flex items-center gap-1">
                           <Star className="h-4 w-4 text-muted-foreground" />
@@ -263,8 +324,11 @@ export default function TaskMarketplacePage() {
                           <span className="font-medium">$350</span>
                         </div>
                         <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
-                          <span>Deadline: May 25, 2023</span>
+                            <span>Deadline: June 25, 2025</span>
+                          <TaskTimer deadline={new Date('2025-06-25')} />
+                        </div>
                         </div>
                         <div className="flex items-center gap-1">
                           <Star className="h-4 w-4 text-muted-foreground" />
@@ -323,8 +387,11 @@ export default function TaskMarketplacePage() {
                           <span className="font-medium">$300</span>
                         </div>
                         <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
-                          <span>Deadline: May 30, 2023</span>
+                            <span>Deadline: May 25, 2025</span>
+                          <TaskTimer deadline={new Date('2025-05-25')} />
+                        </div>
                         </div>
                         <div className="flex items-center gap-1">
                           <Star className="h-4 w-4 text-muted-foreground" />
@@ -383,8 +450,11 @@ export default function TaskMarketplacePage() {
                           <span className="font-medium">$600</span>
                         </div>
                         <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
-                          <span>Deadline: May 16, 2023 (Urgent)</span>
+                          <span>Deadline: May 30, 2025</span>
+                          <TaskTimer deadline={new Date('2025-05-30')} />
+                        </div>
                         </div>
                         <div className="flex items-center gap-1">
                           <Star className="h-4 w-4 text-muted-foreground" />
@@ -415,29 +485,44 @@ export default function TaskMarketplacePage() {
             <DialogDescription>Provide your bid details for this task. Be competitive but fair.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="bid-amount">Bid Amount ($)</Label>
-              <Input id="bid-amount" type="number" placeholder="Enter your bid amount" />
-              <p className="text-xs text-muted-foreground">Suggested range: $400-$500</p>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="completion-time">Estimated Completion Time</Label>
-              <Select>
-                <SelectTrigger id="completion-time">
-                  <SelectValue placeholder="Select timeframe" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1-day">1 day</SelectItem>
-                  <SelectItem value="2-3-days">2-3 days</SelectItem>
-                  <SelectItem value="4-7-days">4-7 days</SelectItem>
-                  <SelectItem value="1-2-weeks">1-2 weeks</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="proposal">Your Proposal</Label>
-              <Textarea id="proposal" placeholder="Describe your approach to completing this task..." rows={4} />
-            </div>
+<div className="space-y-2">
+  <Label htmlFor="bid-amount">Bid Amount ($)</Label>
+  <Input 
+    id="bid-amount" 
+    type="number" 
+    placeholder="Enter your bid amount"
+    value={formData.amount}
+    onChange={(e) => setFormData({...formData, amount: Number(e.target.value)})}
+  />
+  <p className="text-xs text-muted-foreground">Suggested range: $400-$500</p>
+</div>
+<div className="space-y-2">
+  <Label htmlFor="completion-time">Estimated Completion Time</Label>
+  <Select
+    value={formData.timeframe}
+    onValueChange={(value) => setFormData({...formData, timeframe: value})}
+  >
+    <SelectTrigger id="completion-time">
+      <SelectValue placeholder="Select timeframe" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="1-day">1 day</SelectItem>
+      <SelectItem value="2-3-days">2-3 days</SelectItem>
+      <SelectItem value="4-7-days">4-7 days</SelectItem>
+      <SelectItem value="1-2-weeks">1-2 weeks</SelectItem>
+    </SelectContent>
+  </Select>
+</div>
+<div className="space-y-2">
+  <Label htmlFor="proposal">Your Proposal</Label>
+  <Textarea 
+    id="proposal" 
+    placeholder="Describe your approach..." 
+    rows={4}
+    value={formData.proposal}
+    onChange={(e) => setFormData({...formData, proposal: e.target.value})}
+  />
+</div>
             <div className="rounded-lg border p-4">
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4 text-muted-foreground" />
@@ -459,12 +544,14 @@ export default function TaskMarketplacePage() {
               </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setBidDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={() => setBidDialogOpen(false)}>Submit Bid</Button>
-          </DialogFooter>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setBidDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={() => selectedTask && submitBid(selectedTask)}>
+                Submit Bid
+              </Button>
+            </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
