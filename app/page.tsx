@@ -21,13 +21,13 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <Link href="/signup">
+                <Link href="/login">
                   <Button size="lg" className="gap-1.5">
                     Get Started
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
-                <Link href="/how-it-works">
+                <Link href="">
                   <Button size="lg" variant="outline">
                     How It Works
                   </Button>
@@ -133,12 +133,7 @@ export default function LandingPage() {
               </p>
             </div>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <Link href="/signup">
-                <Button size="lg" className="gap-1.5">
-                  Sign Up Now
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
+              
               <Link href="/login">
                 <Button size="lg" variant="outline">
                   Log In
