@@ -377,66 +377,6 @@ export default function WorkerDashboardPage() {
           </div>
         </CardContent>
       </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Reputation & Reviews</CardTitle>
-          <CardDescription>
-            Feedback from clients and your reputation score
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <User className="h-6 w-6 text-primary" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium">4.8/5 Reputation Score</p>
-                <p className="text-sm text-muted-foreground">
-                  Based on 15 reviews
-                </p>
-              </div>
-              <Button variant="outline">View All Reviews</Button>
-            </div>
-
-            <div className="space-y-4">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="rounded-lg border p-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                      <User className="h-5 w-5 text-primary" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">
-                        {["John Doe", "Jane Smith", "Alice Johnson"][i]}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {["Fallen Tree Removal", "Park Bench Repair", "Sidewalk Repair"][i]}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
-                        5/5
-                      </Badge>
-                      <Button variant="ghost" size="sm">
-                        View
-                      </Button>
-                    </div>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {[
-                      "Great work! The tree was removed quickly and safely.",
-                      "The bench looks brand new. Thank you!",
-                      "The sidewalk repair was done perfectly.",
-                    ][i]}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }
