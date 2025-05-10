@@ -155,10 +155,10 @@ export default function DashboardLayout({
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname === "/funding-allocation"}>
-                      <Link href="/funding-allocation">
+                    <SidebarMenuButton asChild isActive={pathname === "/dao-bids"}>
+                      <Link href="/dao-bids">
                         <DollarSign className="h-4 w-4" />
-                        <span>Funding Allocation</span>
+                        <span>Bids</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -166,26 +166,7 @@ export default function DashboardLayout({
               )}
 
               {/* Admin Navigation */}
-              {userRole === "admin" && (
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname === "/admin-dashboard"}>
-                      <Link href="/admin-dashboard">
-                        <ShieldAlert className="h-4 w-4" />
-                        <span>Admin Dashboard</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname === "/dispute-resolution"}>
-                      <Link href="/dispute-resolution">
-                        <Scale className="h-4 w-4" />
-                        <span>Dispute Resolution</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              )}
+              
             </SidebarContent>
             <SidebarFooter className="border-t p-4">
               <div className="flex flex-col gap-2">
@@ -203,7 +184,6 @@ export default function DashboardLayout({
                     <DropdownMenuItem onClick={() => handleRoleChange("citizen")}>Citizen</DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleRoleChange("worker")}>Worker</DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleRoleChange("dao")}>DAO Member</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleRoleChange("admin")}>Admin</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>

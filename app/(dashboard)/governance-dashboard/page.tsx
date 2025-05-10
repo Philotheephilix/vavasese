@@ -210,55 +210,7 @@ export default function GovernanceDashboardPage() {
             </CardFooter>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Create Proposal</CardTitle>
-              <CardDescription>Start a new governance proposal</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="rounded-lg border p-4 hover:bg-muted/50 transition cursor-pointer">
-                  <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                    <Building className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="font-medium">Infrastructure Proposal</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Propose new infrastructure projects or maintenance initiatives
-                  </p>
-                </div>
-                <div className="rounded-lg border p-4 hover:bg-muted/50 transition cursor-pointer">
-                  <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                    <Users className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="font-medium">Community Program</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Propose new community initiatives, events, or social programs
-                  </p>
-                </div>
-                <div className="rounded-lg border p-4 hover:bg-muted/50 transition cursor-pointer">
-                  <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                    <LucideShield className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="font-medium">Policy Change</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Propose changes to governance policies or operational rules
-                  </p>
-                </div>
-                <div className="rounded-lg border p-4 hover:bg-muted/50 transition cursor-pointer">
-                  <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                    <LucidePencil className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="font-medium">Custom Proposal</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Create a custom proposal for topics not covered by other categories
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button className="w-full">Create New Proposal</Button>
-            </CardFooter>
-          </Card>
+          
         </TabsContent>
 
         <TabsContent value="past" className="space-y-4">
