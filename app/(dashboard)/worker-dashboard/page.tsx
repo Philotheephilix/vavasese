@@ -1,14 +1,37 @@
+"use client"
+
+import { useState, useEffect } from "react"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { CheckCircle, Clock, DollarSign, FileText, Upload, User } from "lucide-react"
+import { AlertCircle, CheckCircle, Clock, DollarSign, FileText, Upload, User } from "lucide-react"
+import { useBidStore } from "@/lib/stores/bids"
 
 export default function WorkerDashboardPage() {
+  const { bids } = useBidStore()
+  const [walletAddress, setWalletAddress] = useState<string | null>(null)
+
+  // Mock wallet connection - replace with actual wallet implementation
+  useEffect(() => {
+    setWalletAddress("0x123...") // Replace with real wallet address
+  }, [])
+
+  const workerBids = bids.filter(bid => bid.wallet === walletAddress)
+  const approvedBids = workerBids.filter(bid => bid.status === 'approved')
+  const pendingBids = workerBids.filter(bid => bid.status === 'pending')
+
+  const stats = {
+    activeTasks: approvedBids.length,
+    completedTasks: 12, // Keep separate or add completion status
+    earnings: approvedBids.reduce((sum, bid) => sum + bid.amount, 0),
+    reputation: 4.8
+  }
+
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col w-full gap-6 max-w-full">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Worker Dashboard</h1>
         <p className="text-muted-foreground">
@@ -23,22 +46,18 @@ export default function WorkerDashboardPage() {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3</div>
-            <p className="text-xs text-muted-foreground">
-              Tasks in progress
-            </p>
+            <div className="text-2xl font-bold">{stats.activeTasks}</div>
+            <p className="text-xs text-muted-foreground">Tasks in progress</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completed Tasks</CardTitle>
-            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Pending Bids</CardTitle>
+            <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">
-              +3 from last month
-            </p>
+            <div className="text-2xl font-bold">{pendingBids.length}</div>
+            <p className="text-xs text-muted-foreground">Awaiting approval</p>
           </CardContent>
         </Card>
         <Card>
@@ -47,10 +66,8 @@ export default function WorkerDashboardPage() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$1,250</div>
-            <p className="text-xs text-muted-foreground">
-              This month
-            </p>
+            <div className="text-2xl font-bold">${stats.earnings}</div>
+            <p className="text-xs text-muted-foreground">This month</p>
           </CardContent>
         </Card>
         <Card>
@@ -59,227 +76,81 @@ export default function WorkerDashboardPage() {
             <User className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">4.8/5</div>
-            <p className="text-xs text-muted-foreground">
-              Based on 15 reviews
-            </p>
+            <div className="text-2xl font-bold">{stats.reputation}/5</div>
+            <p className="text-xs text-muted-foreground">Based on 15 reviews</p>
           </CardContent>
         </Card>
       </div>
 
       <Tabs defaultValue="active" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="active">Active Tasks (3)</TabsTrigger>
-          <TabsTrigger value="pending">Pending Approval (2)</TabsTrigger>
+          <TabsTrigger value="active">Active Tasks ({approvedBids.length})</TabsTrigger>
+          <TabsTrigger value="pending">Pending Approval ({pendingBids.length})</TabsTrigger>
           <TabsTrigger value="completed">Completed (12)</TabsTrigger>
         </TabsList>
+
         <TabsContent value="active" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle>Pothole Repair on Main Street</CardTitle>
-              <CardDescription>
-                Assigned 2 days ago • Due in 3 days
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <Badge>Infrastructure</Badge>
-                  <Badge variant="outline" className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-300 dark:hover:bg-yellow-900">
-                    In Progress
-                  </Badge>
-                </div>
+          {approvedBids.map((bid) => (
+            <Card key={bid.id}>
+              <CardHeader className="pb-2">
+                <CardTitle>{bid.taskTitle}</CardTitle>
+                <CardDescription>
                 
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span>Progress</span>
-                    <span>60%</span>
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="bg-green-100 text-green-800">
+                      Approved
+                    </Badge>
+                    <Badge>Budget: ${bid.amount}</Badge>
                   </div>
-                  <Progress value={60} className="h-2" />
-                </div>
-
-                <div className="rounded-lg border p-4">
-                  <h4 className="mb-2 text-sm font-medium">Milestone Checklist</h4>
+                  
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <input type="checkbox" id="milestone-1" className="h-4 w-4" checked disabled />
-                      <Label htmlFor="milestone-1" className="text-sm">Initial assessment completed</Label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <input type="checkbox" id="milestone-2" className="h-4 w-4" checked disabled />
-                      <Label htmlFor="milestone-2" className="text-sm">Materials acquired</Label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <input type="checkbox" id="milestone-3" className="h-4 w-4" checked disabled />
-                      <Label htmlFor="milestone-3" className="text-sm">Area prepared for repair</Label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <input type="checkbox" id="milestone-4" className="h-4 w-4" />
-                      <Label htmlFor="milestone-4" className="text-sm">Pothole filled and patched</Label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <input type="checkbox" id="milestone-5" className="h-4 w-4" />
-                      <Label htmlFor="milestone-5" className="text-sm">Final inspection and cleanup</Label>
-                    </div>
+                    <Label>Work Proposal</Label>
+                    <p className="text-sm text-muted-foreground">{bid.proposal}</p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    <Button>
+                      <Upload className="h-4 w-4 mr-2" />
+                      Submit Work Proof
+                    </Button>
+                    <Button variant="outline">
+                      Request Extension
+                    </Button>
                   </div>
                 </div>
-
-                <div className="rounded-lg border p-4">
-                  <h4 className="mb-2 text-sm font-medium">Task Details</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Large pothole approximately 2 feet wide causing traffic hazards and potential vehicle damage. Requires filling and patching with asphalt.
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-4">
-                    <div>
-                      <p className="text-xs text-muted-foreground">Location</p>
-                      <p className="text-sm">123 Main St, Anytown</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Payment</p>
-                      <p className="text-sm">$450</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Deadline</p>
-                      <p className="text-sm">May 20, 2023</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  <Button className="gap-1">
-                    <Upload className="h-4 w-4" />
-                    Submit Proof
-                  </Button>
-                  <Button variant="outline">
-                    Request Extension
-                  </Button>
-                  <Button variant="outline">
-                    Contact Citizen
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle>Street Light Replacement</CardTitle>
-              <CardDescription>
-                Assigned 3 days ago • Due in 5 days
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <Badge>Utilities</Badge>
-                  <Badge variant="outline" className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-300 dark:hover:bg-yellow-900">
-                    In Progress
-                  </Badge>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span>Progress</span>
-                    <span>40%</span>
-                  </div>
-                  <Progress value={40} className="h-2" />
-                </div>
-
-                <Button variant="link" className="px-0">
-                  View Details
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle>Graffiti Removal at Community Center</CardTitle>
-              <CardDescription>
-                Assigned 1 week ago • Due in 1 week
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <Badge>Public Property</Badge>
-                  <Badge variant="outline" className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-300 dark:hover:bg-yellow-900">
-                    In Progress
-                  </Badge>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span>Progress</span>
-                    <span>25%</span>
-                  </div>
-                  <Progress value={25} className="h-2" />
-                </div>
-
-                <Button variant="link" className="px-0">
-                  View Details
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          ))}
         </TabsContent>
+
         <TabsContent value="pending" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Pending Approval</CardTitle>
-              <CardDescription>
-                Tasks awaiting client verification
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center gap-4 rounded-lg border p-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                    <FileText className="h-5 w-5 text-primary" />
+          {pendingBids.map((bid) => (
+            <Card key={bid.id}>
+              <CardHeader className="pb-2">
+                <CardTitle>{bid.taskTitle}</CardTitle>
+                <CardDescription>
+                  Submitted on {bid.timestamp.toLocaleDateString()}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <p className="text-sm">Bid Amount: ${bid.amount}</p>
+                    <p className="text-sm">Proposed Timeline: {bid.days} days</p>
                   </div>
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium leading-none">
-                      Fallen Tree Removal
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Completed on May 14, 2023 • Awaiting verification
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-                      Pending
-                    </Badge>
-                    <Button variant="ghost" size="sm">
-                      View
-                    </Button>
-                  </div>
+                  <Badge variant="outline" className="bg-yellow-100 text-yellow-800">
+                    Under Review
+                  </Badge>
                 </div>
-
-                <div className="flex items-center gap-4 rounded-lg border p-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                    <FileText className="h-5 w-5 text-primary" />
-                  </div>
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium leading-none">
-                      Park Bench Repair
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Completed on May 10, 2023 • Awaiting verification
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-                      Pending
-                    </Badge>
-                    <Button variant="ghost" size="sm">
-                      View
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          ))}
         </TabsContent>
+
         <TabsContent value="completed" className="space-y-4">
           <Card>
             <CardHeader>
@@ -354,9 +225,8 @@ export default function WorkerDashboardPage() {
                           <Badge variant="outline" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                             Paid
                           </Badge>
-                        )}\
-
-</td>
+                        )}
+                      </td>
                       <td className="px-4 py-2 text-sm">
                         {["May 14, 2023", "May 10, 2023", "April 28, 2023", "April 15, 2023", "March 30, 2023"][i]}
                       </td>
@@ -378,5 +248,5 @@ export default function WorkerDashboardPage() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
