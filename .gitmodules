@@ -1,3 +1,9 @@
 [submodule "GrievanceRegistry/lib/forge-std"]
 	path = GrievanceRegistry/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "contracts/timelock-escrow/lib/forge-std"]
+	path = contracts/timelock-escrow/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "contracts/timelock-escrow/lib/reactive-lib"]
+	path = contracts/timelock-escrow/lib/reactive-lib
+	url = https://github.com/Reactive-Network/reactive-lib
