@@ -70,6 +70,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const configuredVerifier = new SelfBackendVerifier(
                 'https://forno.celo.org',
                 "VAVASASA",
+                "hex", 
+                true
+
             );
             
             if (minimumAge !== undefined) {
