@@ -22,7 +22,7 @@ function Playground() {
     // Import and initialize SelfAppBuilder only on client side
     import('@selfxyz/qrcode').then(({ SelfAppBuilder }) => {
       const app = new SelfAppBuilder({
-        appName: "Urbexium",
+        appName: "Milestone",
         scope: "self-playground",
         endpoint: "https://playground.staging.self.xyz/api/verify",
         userId: newUserId,
@@ -43,7 +43,7 @@ function Playground() {
   if (!userId || !selfApp) return (
     <div className="App flex flex-col min-h-screen bg-black text-white">
       <nav className="w-full bg-black border-b border-gray-800 py-3 px-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">Urbexium</h1>
+        <h1 className="text-2xl font-bold text-white">Milestone</h1>
       </nav>
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
         <p>Loading...</p>
@@ -54,7 +54,7 @@ function Playground() {
   return (
     <div className="App flex flex-col min-h-screen bg-black text-white" suppressHydrationWarning>
       <nav className="w-full bg-black border-b border-gray-800 py-3 px-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">Urbexium</h1>
+        <h1 className="text-2xl font-bold text-white">Milestone</h1>
       </nav>
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
         <h2 className="text-xl md:text-2xl font-bold mb-8">Login with Self Protocol by CELO</h2>

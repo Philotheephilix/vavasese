@@ -63,7 +63,7 @@ export default function DashboardLayout({
           <Sidebar className="h-full flex flex-col">
             <SidebarHeader className="border-b px-6 py-3">
               <Link href="/dashboard" className="flex items-center gap-2">
-                <span className="font-bold text-3xl">Urbexium</span>
+                <span className="font-bold text-3xl">Milestone</span>
               </Link>
             </SidebarHeader>
             <SidebarContent className="flex-grow overflow-y-auto">

@@ -9,7 +9,7 @@ import './globals.css'
 import { ThemeProvider } from "@/components/theme-provider"
 
 export const metadata: Metadata = {
-  title: "Urbexium",
+  title: "Milestone",
   description: "A platform for citizens, workers, and DAO members to resolve local issues",
     generator: 'Nungambakkam Knight Riders'
 }
