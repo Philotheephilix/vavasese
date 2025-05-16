@@ -17,17 +17,51 @@ import { TaskTimer } from "@/components/task-timer"
 import { useBidStore } from "@/lib/stores/bids"
 import { Input } from "@/components/ui/input"
 
-
+import { ethers } from "ethers";
+import TimeLockEscrowABI from "../../../contracts/timelock-escrow/out/TimeLockEscrow.sol/TimeLockEscrow.json"; 
 export default function DaoBidsPage() {
     const { bids, approveBid, rejectBid } = useBidStore()
     const [sortBy, setSortBy] = useState("newest")
     const [statusFilter, setStatusFilter] = useState("all")
     const [searchQuery, setSearchQuery] = useState("")
   
-    const handleApprove = (bidId: string) => {
-      approveBid(bidId)
-      // Add any additional logic like API calls
-    }
+    const handleApprove = async (bidId: string) => {
+      const bid = bids.find(b => b.id === bidId);
+      if (!bid) return;
+    
+      try {
+          const provider = new ethers.BrowserProvider(window.ethereum);
+          const signer = await provider.getSigner();
+        const escrow = new ethers.Contract(
+          process.env.NEXT_PUBLIC_ESCROW_ADDRESS!,
+          TimeLockEscrowABI.abi,
+          signer
+        );
+    
+        // Calculate delay from bid deadline
+        const deadlineTime = new Date(bid.deadline).getTime();
+        const currentTime = Math.floor(Date.now() / 1000);
+        const delaySeconds = Math.max(0, deadlineTime - currentTime);
+    
+        // Convert USD to ETH
+        const ethAmount = await convertUsdToEth(bid.amount);
+        const value = ethers.parseEther(ethAmount.toString());
+    
+        // Deposit and wait for transaction
+        const tx = await escrow.deposit(delaySeconds, { value });
+        const receipt = await tx.wait();
+    
+        // Get the deposit index from event logs
+        const depositEvent = receipt.events?.find((e: any) => e.event === "Deposited");
+        const escrowIndex = depositEvent?.args?.index.toNumber();
+    
+        // Update store with escrow index
+        approveBid(bidId, escrowIndex);
+    
+      } catch (error) {
+        console.error("Approval failed:", error);
+      }
+    };
   
     const handleReject = (bidId: string) => {
       rejectBid(bidId)
@@ -49,7 +83,7 @@ export default function DaoBidsPage() {
       default: return 0
     }
   })
-  console.log(filteredBids[0].wallet)
+  console.log(filteredBids[0])
   
 
   return (
@@ -166,4 +200,19 @@ export default function DaoBidsPage() {
       </Card>
     </div>
   )
+}
+async function convertUsdToEth(usdAmount: number): Promise<number> {
+  try {
+    // Fetch current ETH price in USD from CoinGecko API
+    const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+    const data = await response.json();
+    const ethPrice = data.ethereum.usd;
+
+    // Convert USD amount to ETH
+    const ethAmount = usdAmount / ethPrice;
+    return Number(ethAmount.toFixed(6)); // Return with 6 decimal precision
+  } catch (error) {
+    console.error('Error fetching ETH price:', error);
+    throw new Error('Failed to convert USD to ETH');
+  }
 }

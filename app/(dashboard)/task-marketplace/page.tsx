@@ -360,7 +360,9 @@ const connectWallet = async () => {
         bidder: "Worker123", // Replace with actual user wallet address
         timestamp: new Date(),
         wallet: walletAddress?.toString() || "0x38b09fF7F662D02402397653766ed795F9FD8f25",
-        deadline: calculateDeadline(task.timestamp, task.estimatedDays)
+        deadline: calculateDeadline(task.timestamp, task.estimatedDays),
+        escrowIndex: null,
+        paid: false
       })
 
       setFormData({ amount: 0, timeframe: "", proposal: "" })
