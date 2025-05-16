@@ -66,7 +66,7 @@ export default function SubmitGrievancePage() {
         formPayload.append(`image`, file)
       })
 
-      const response = await fetch('http://localhost:5000/submit_grievance', {
+      const response = await fetch('https://cdp-agent.vercel.app/submit_grievance', {
         method: 'POST',
         body: formPayload
       })

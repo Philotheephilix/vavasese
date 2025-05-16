@@ -1,13 +1,9 @@
 import os
-import sys
-import time
 import uuid
 from flask import Flask, request, render_template, jsonify, send_from_directory
 import base64
 import requests
-import io
 import json
-from PIL import Image
 
 from coinbase_agentkit import (
     AgentKit,
@@ -19,7 +15,6 @@ from coinbase_agentkit import (
     wallet_action_provider,
     weth_action_provider,
 )
-from coinbase_agentkit_langchain import get_langchain_tools
 from dotenv import load_dotenv
 from eth_account import Account
 from langchain_core.messages import HumanMessage
@@ -387,4 +382,3 @@ EthAccountWalletProvider.encode_contract_call = encode_contract_call
 # Monkey patch the wallet provider class
 if __name__ == "__main__":
     initialize_agent()
-    app.run(host="0.0.0.0", port=5000, debug=True)
