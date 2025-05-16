@@ -329,9 +329,82 @@ export default function DashboardPage() {
           </Card>
         </TabsContent>
         
-        
-        <TabsContent value="transactions" className="space-y-4">
-          <GovernmentTransactions />
+        <TabsContent value="nearby" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Nearby Issues</CardTitle>
+              <CardDescription>Issues reported in your neighborhood</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center gap-4 rounded-lg border p-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                  <MapPin className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <p className="text-sm font-medium leading-none">Fallen Tree on Oak Street</p>
+                  <p className="text-sm text-muted-foreground">0.5 miles away • High Priority</p>
+                </div>
+                <Button variant="ghost" size="sm">
+                  View
+                </Button>
+              </div>
+              <div className="flex items-center gap-4 rounded-lg border p-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                  <MapPin className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <p className="text-sm font-medium leading-none">Water Main Break</p>
+                  <p className="text-sm text-muted-foreground">0.8 miles away • Critical Priority</p>
+                </div>
+                <Button variant="ghost" size="sm">
+                  View
+                </Button>
+              </div>
+              <div className="flex items-center gap-4 rounded-lg border p-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                  <MapPin className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <p className="text-sm font-medium leading-none">Graffiti on Community Center</p>
+                  <p className="text-sm text-muted-foreground">1.2 miles away • Medium Priority</p>
+                </div>
+                <Button variant="ghost" size="sm">
+                  View
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="votes" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Active Votes</CardTitle>
+              <CardDescription>Ongoing voting sessions you can participate in</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center gap-4 rounded-lg border p-4">
+                <div className="flex-1 space-y-1">
+                  <p className="text-sm font-medium leading-none">Park Renovation Funding</p>
+                  <p className="text-sm text-muted-foreground">Ends in 3 days • 245 participants</p>
+                </div>
+                <Button size="sm">Vote Now</Button>
+              </div>
+              <div className="flex items-center gap-4 rounded-lg border p-4">
+                <div className="flex-1 space-y-1">
+                  <p className="text-sm font-medium leading-none">Road Repair Prioritization</p>
+                  <p className="text-sm text-muted-foreground">Ends in 5 days • 178 participants</p>
+                </div>
+                <Button size="sm">Vote Now</Button>
+              </div>
+              <div className="flex items-center gap-4 rounded-lg border p-4">
+                <div className="flex-1 space-y-1">
+                  <p className="text-sm font-medium leading-none">Community Center Programs</p>
+                  <p className="text-sm text-muted-foreground">Ends in 1 week • 312 participants</p>
+                </div>
+                <Button size="sm">Vote Now</Button>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
 
