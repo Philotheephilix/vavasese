@@ -17,53 +17,6 @@ import { TaskTimer } from "@/components/task-timer"
 import { useBidStore } from "@/lib/stores/bids"
 import { Input } from "@/components/ui/input"
 
-type Bid = {
-  id: string
-  taskId: string
-  taskTitle: string
-  amount: number
-  days: number
-  proposal: string
-  bidder: string
-  timestamp: Date
-  status: "pending" | "approved" | "rejected"
-}
-
-const mockBids: Bid[] = [
-  {
-    id: "BID-001",
-    taskId: "TASK-0451",
-    taskTitle: "Pothole Repair on Main Street",
-    amount: 420,
-    days: 2,
-    proposal: "Will use premium asphalt mix with guaranteed 2-year durability",
-    bidder: "RoadMasters Inc",
-    timestamp: new Date("2023-05-18"),
-    status: "pending"
-  },
-  {
-    id: "BID-002",
-    taskId: "TASK-0783",
-    taskTitle: "Street Light Replacement",
-    amount: 375,
-    days: 3,
-    proposal: "Certified electricians using eco-friendly LED fixtures",
-    bidder: "LightWave Solutions",
-    timestamp: new Date("2023-05-19"),
-    status: "pending"
-  },
-  {
-    id: "BID-003",
-    taskId: "TASK-0912",
-    taskTitle: "Graffiti Removal",
-    amount: 295,
-    days: 1,
-    proposal: "Eco-friendly chemical solution with color matching repaint",
-    bidder: "CleanCity Crew",
-    timestamp: new Date("2023-05-20"),
-    status: "pending"
-  }
-]
 
 export default function DaoBidsPage() {
     const { bids, approveBid, rejectBid } = useBidStore()
@@ -96,6 +49,7 @@ export default function DaoBidsPage() {
       default: return 0
     }
   })
+  console.log(filteredBids[0].wallet)
   
 
   return (
